@@ -5,26 +5,29 @@ namespace SkipWhileBenchmark;
 
 public class Program
 {
-    static async Task Main(string[] args)
+    static void Main()
     {
 
         BenchmarkRunner.Run<Benchy>();
 
-
+        //Benchy b = new();
+        //b.Age = 10;
+        //Console.WriteLine(b.WithWhere());
+        //Console.WriteLine(b.WithSkipWhile());   
     }
 
     [MemoryDiagnoser]
     public class Benchy
     {
-        const int limit = 50;
-        private Person[]? people;
+        
+        private Person[] people;
         
         [Params(1,10,25,50,75,90,99)]
         public int Age { get; set; }
 
         public Benchy()
         {
-            people = PersonService.GetPeople(10000);
+            people = PersonService.GetPeople(100000);
         }
        
 
@@ -38,7 +41,7 @@ public class Program
         [Benchmark]
         public int WithSkipWhile()
         {
-            var peopleSkip = people.Where(x => x.Age < this.Age);
+            var peopleSkip = people.SkipWhile(x => x.Age < this.Age);
             return peopleSkip.Count();
         }
 
